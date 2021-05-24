@@ -1,9 +1,21 @@
-import datetime
+import datetime, os
 
 class BasicInfo:
   def __init__(self):
     self.data = {}
-  
+    self.templates = []
+    self.templatePaths = []
+    self.scanFiles()
+
+  # Setter Methods
+
+  def scanFiles(self):
+    for filePath in os.listdir('./templates'):
+      name, ext = os.path.splitext(filePath)
+      if ext == ".docx":
+        self.templates.append(name)
+        self.templatePaths.append(os.path.join(os.getcwd(),filePath))
+
   def gather_data(self):
     
     data_list = {'date': datetime.datetime.today().strftime('%m/%d/%Y'),
@@ -23,6 +35,10 @@ class BasicInfo:
   def reset(self):
     self.data = {}
 
+  # Getter Methods
 
-templates = ['Casual Template']
-templateNames = ['templates\casual_admin_template.docx']
+  def getTemplateNames(self):
+    return self.templates
+
+  def getTemplatePaths(self):
+    return self.templatePaths
