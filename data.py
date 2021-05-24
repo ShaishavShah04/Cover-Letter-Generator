@@ -1,9 +1,28 @@
+import datetime
 
-templateData = {
-    'CS Instructor Template': {
-                                'Required Fields': ['py_date','py_company_name','py_company_street_address','py_city','py_state','py_postal_code','py_position']
-                              },
-    'CS / Software Intern Template': None # Not configured yet
-}
+class BasicInfo:
+  def __init__(self):
+    self.data = {}
+  
+  def gather_data(self):
+    
+    data_list = {'date': datetime.datetime.today().strftime('%m/%d/%Y'),
+                 'company_name': None,
+                 'company_street_address':None,
+                 'city': None,
+                 'state':None,
+                 'postal_code': None,
+                 'position_name': None
+    }
+    for key in data_list.keys():
+      if data_list.get(key, None) == None:
+        data_list[key] = input('What is the {}: '.format(key))
+  
+    return data_list
 
-templateNames = [ 'CS Instructor Template' , 'CS / Software Intern Template']
+  def reset(self):
+    self.data = {}
+
+
+templates = ['Casual Template']
+templateNames = ['templates\casual_admin_template.docx']
