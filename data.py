@@ -10,11 +10,11 @@ class BasicInfo:
   # Setter Methods
 
   def scanFiles(self):
-    for filePath in os.listdir('./templates'):
-      name, ext = os.path.splitext(filePath)
-      if ext == ".docx":
+    for filename in os.listdir('./templates'):
+      name, ext = os.path.splitext(filename)
+      if ext == ".docx" or ext == ".doc":
         self.templates.append(name)
-        self.templatePaths.append(os.path.join(os.getcwd(),filePath))
+        self.templatePaths.append(os.path.join(os.getcwd(),"templates", filename))
 
   def gather_data(self):
     

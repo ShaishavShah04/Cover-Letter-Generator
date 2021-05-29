@@ -6,6 +6,7 @@
 # Imports
 from docxtpl import DocxTemplate
 from docx2pdf import convert
+import os
 # Data
 from data import BasicInfo
 
@@ -35,24 +36,36 @@ def menu(Data):
             return userChoice - 1
     
 
-def processingDoc(choice, data):
-    name = data.getTemplatePaths()[choice]
+def processingDoc(choice, Data, form_info):
+    name = Data.getTemplatePaths()[choice]
     doc = DocxTemplate(name)
-    doc.render(data)
-    doc.save('{}_{}_CoverLetter.docx'.format(data.get('company_name','Company'), data.get('position_name','Position')))
+    doc.render(form_info)
+    path = os.path.join( os.getcwd() ,"outputs", "temporary.docx")
+    if not os.path.exists(os.path.join(os.getcwd(), "outputs")):
+        os.mkdir(os.path.join(os.getcwd(), "outputs"))
+    doc.save(path)
+    return path
+
+def docx_to_pdf(old_path, form_info):
+    if os.path.exists(old_path):
+        name_to_save = '{}_{}_CoverLetter.pdf'.format(form_info.get('company_name','Company'), form_info.get('position_name','Position'))
+        convert(old_path, os.path.join(os.getcwd(), "outputs", name_to_save ))
+        os.remove(old_path)
 
 def again():
     userChoice = input("\nDo you want to generate another cover letter? [Y/N]: ")
-    if not userChoice.lower() in {"y",""}:
+    if not userChoice.lower() == "y":
         exit()
     
 
 def main():
-    Data = BasicInfo()
+    DataClass = BasicInfo()
     while True:
-        choice = menu(Data)
-        data = Data.gather_data()
-        processingDoc(choice, data)
-        Data.reset()
+        choice = menu(DataClass)
+        data = DataClass.gather_data()
+        old_path = processingDoc(choice, DataClass, data)
+        docx_to_pdf(old_path, data)
+        DataClass.reset()
+        again()
 
 main()
